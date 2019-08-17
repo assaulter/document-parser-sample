@@ -9,8 +9,8 @@
       </div>
       <div class="row mt-4">
         <div class="col">
-          <OutputTextList 
-            :textList="inputTextList" 
+          <OutputTextList
+            :textList="inputTextList"
             @emit-text-list="onEmitTextList"
             @emit-change-text-list="onChangeTextList"
           ></OutputTextList>
@@ -30,7 +30,7 @@ import HtmlInputForm from './components/HtmlInputForm.vue';
 import OutputTextList from './components/OutputTextList.vue';
 import OutputHtml from './components/OutputHtml.vue';
 
-var textList = [];
+const textList = [];
 
 // private method
 function parse(inputHtml) {
@@ -46,10 +46,10 @@ function isEmpty(data) {
 
 // nodeListを受け取って再帰する
 function updateTextList(nodeList) {
-  nodeList.forEach(node => {
+  nodeList.forEach((node) => {
     // guard条件
     // 1. node.nodeType == TEXT_NODE の場合
-    if(node.nodeType == 3) {
+    if (node.nodeType == 3) {
       const value = node.nodeValue;
       // ホワイトスペースノードは除外
       if (isEmpty(value)) { return; }
@@ -57,8 +57,8 @@ function updateTextList(nodeList) {
       return;
     }
     // 2. 子がいなかったらreturn
-    const childNodes = node.childNodes;
-    if(childNodes.length <= 0) {
+    const { childNodes } = node;
+    if (childNodes.length <= 0) {
       return;
     }
     updateTextList(childNodes);
@@ -67,10 +67,10 @@ function updateTextList(nodeList) {
 
 // nodeListを受け取り再帰しつつ、outputTextListを見ながら復旧
 function updateNodeList(nodeList, textList) {
-  nodeList.forEach(node => {
+  nodeList.forEach((node) => {
     // guard条件
     // 1. node.nodeType == TEXT_NODE の場合
-    if(node.nodeType == 3) {
+    if (node.nodeType == 3) {
       // ホワイトスペースノードは除外
       if (isEmpty(node.nodeValue)) { return; }
       const text = textList.shift();
@@ -78,8 +78,8 @@ function updateNodeList(nodeList, textList) {
       return;
     }
     // 2. 子がいなかったらreturn
-    const childNodes = node.childNodes;
-    if(childNodes.length <= 0) {
+    const { childNodes } = node;
+    if (childNodes.length <= 0) {
       return;
     }
     updateNodeList(childNodes, textList);
@@ -98,7 +98,7 @@ export default {
   components: {
     HtmlInputForm,
     OutputTextList,
-    OutputHtml
+    OutputHtml,
   },
   methods: {
     onEmitMessage(val) {
@@ -117,11 +117,11 @@ export default {
 
       updateNodeList(nodeList, val);
       const doc = document.createElement('div');
-      nodeList.forEach(node => {
+      nodeList.forEach((node) => {
         doc.appendChild(node);
-      })
+      });
       this.outputHtml = doc.innerHTML;
-    }
+    },
   },
 };
 </script>
