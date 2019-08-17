@@ -23,7 +23,9 @@ clipboard.on('success', function(e) {
 
 export default {
   name: 'OutputHtml',
-  props: ['outputHtml'],
+  props: {
+    outputHtml: String
+  },
   computed: {
     html: {
       get() {

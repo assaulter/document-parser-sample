@@ -9,7 +9,11 @@
       </div>
       <div class="row mt-4">
         <div class="col">
-          <OutputTextList :textList="inputTextList" @emit-text-list="onEmitTextList"></OutputTextList>
+          <OutputTextList 
+            :textList="inputTextList" 
+            @emit-text-list="onEmitTextList"
+            @emit-change-text-list="onChangeTextList"
+          ></OutputTextList>
         </div>
       </div>
       <div class="row mt-4">
@@ -97,19 +101,18 @@ export default {
     OutputHtml
   },
   methods: {
-    onEmitMessage(arg) {
-      this.inputHtml = arg;
-      const nodeList = parse(arg);
+    onEmitMessage(val) {
+      this.inputHtml = val;
+      const nodeList = parse(val);
       updateTextList(nodeList);
       this.inputTextList = textList;
     },
-    onEmitTextList(textList) {
+    onChangeTextList(val) {
+      this.inputTextList = val;
+    },
+    onEmitTextList(val) {
       const nodeList = parse(this.inputHtml);
-      // htmlに戻してoutputHtmlにセットする
-      if(textList.length <= 0) {
-        alert('empty!!');
-      }
-      updateNodeList(nodeList, textList);
+      updateNodeList(nodeList, val);
       const doc = document.createElement('div');
       nodeList.forEach(node => {
         doc.appendChild(node);

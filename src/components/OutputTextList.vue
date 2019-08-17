@@ -18,11 +18,8 @@
 <script>
 export default {
   name: 'OutputTextList',
-  props: ['textList'],
-  data() {
-    return {
-      inputText: ''
-    }
+  props: {
+    textList: Array
   },
   computed: {
     text: {
@@ -30,20 +27,20 @@ export default {
         return this.textList.join('\n');
       },
       set(val) {
-        this.inputText = val;
+        this.$emit('emit-change-text-list', val.split('\n'));
       }
     },
     rows() {
-      const num = this.textList.length;
+      const num = this.text.split('\n');
       return (num > 4) ? num : 4;
     },
     isButtonDisabled() {
-      return this.inputText.length <= 0
+      return this.text.length <= 0
     }
   },
   methods: {
     emitTextList() {
-      const textList = this.inputText.split('\n');
+      const textList = this.text.split('\n');
       this.$emit('emit-text-list', textList);
     }
   }
