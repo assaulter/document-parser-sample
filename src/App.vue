@@ -7,9 +7,14 @@
           <HtmlInputForm @emit-message="onEmitMessage"/>
         </div>
       </div>
-      <div class="row">
+      <div class="row mt-4">
         <div class="col">
-          <OutputTextList :textList="outputTextList" @emit-text-list="onEmitTextList"></OutputTextList>
+          <OutputTextList :textList="inputTextList" @emit-text-list="onEmitTextList"></OutputTextList>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col">
+          <OutputHtml :outputHtml="outputHtml"></OutputHtml>
         </div>
       </div>
     </div>
@@ -19,6 +24,7 @@
 <script>
 import HtmlInputForm from './components/HtmlInputForm.vue';
 import OutputTextList from './components/OutputTextList.vue';
+import OutputHtml from './components/OutputHtml.vue';
 
 var textList = [];
 
@@ -27,10 +33,11 @@ function parse(inputHtml) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(inputHtml, 'text/html');
   // bodyより下のNodeList
-  const bodyChildren = doc.getElementsByTagName('body')[0].childNodes;
-  updateTextList(bodyChildren);
+  return doc.getElementsByTagName('body')[0].childNodes;
+}
 
-  return textList.map(text => text.nodeValue);
+function isEmpty(data) {
+  return !(/[^\t\n\r ]/.test(data));
 }
 
 // nodeListを受け取って再帰する
@@ -39,7 +46,10 @@ function updateTextList(nodeList) {
     // guard条件
     // 1. node.nodeType == TEXT_NODE の場合
     if(node.nodeType == 3) {
-      textList.push(node);
+      const value = node.nodeValue;
+      // ホワイトスペースノードは除外
+      if (isEmpty(value)) { return; }
+      textList.push(node.nodeValue);
       return;
     }
     // 2. 子がいなかったらreturn
@@ -51,25 +61,60 @@ function updateTextList(nodeList) {
   });
 }
 
+// nodeListを受け取り再帰しつつ、outputTextListを見ながら復旧
+function updateNodeList(nodeList, textList) {
+  nodeList.forEach(node => {
+    // guard条件
+    // 1. node.nodeType == TEXT_NODE の場合
+    if(node.nodeType == 3) {
+      // ホワイトスペースノードは除外
+      if (isEmpty(node.nodeValue)) { return; }
+      const text = textList.shift();
+      node.nodeValue = text;
+      return;
+    }
+    // 2. 子がいなかったらreturn
+    const childNodes = node.childNodes;
+    if(childNodes.length <= 0) {
+      return;
+    }
+    updateNodeList(childNodes, textList);
+  });
+}
+
 export default {
   name: 'app',
   data() {
     return {
       inputHtml: '',
-      outputTextList: [],
+      inputTextList: [],
+      outputHtml: '',
     };
   },
   components: {
     HtmlInputForm,
-    OutputTextList
+    OutputTextList,
+    OutputHtml
   },
   methods: {
     onEmitMessage(arg) {
       this.inputHtml = arg;
-      this.outputTextList = parse(arg);
+      const nodeList = parse(arg);
+      updateTextList(nodeList);
+      this.inputTextList = textList;
     },
     onEmitTextList(textList) {
-      console.log(textList);
+      const nodeList = parse(this.inputHtml);
+      // htmlに戻してoutputHtmlにセットする
+      if(textList.length <= 0) {
+        alert('empty!!');
+      }
+      updateNodeList(nodeList, textList);
+      const doc = document.createElement('div');
+      nodeList.forEach(node => {
+        doc.appendChild(node);
+      })
+      this.outputHtml = doc.innerHTML;
     }
   },
 };

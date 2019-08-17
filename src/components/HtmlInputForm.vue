@@ -1,12 +1,12 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Htmlを貼り付ける</h4>
+      <h4 class="card-title">1.htmlを貼り付ける</h4>
       <div class="card-text">
-        <textarea class="form-control" v-model="message" :rows="rows"></textarea>
+        <textarea class="form-control" v-model="message" :rows="4"></textarea>
       </div>
       <div class="card-text mt-4">
-        <button @click="emitMessage" type="button" class="btn btn-primary">submit</button>
+        <button v-bind:disabled="isButtonDisabled" @click="emitMessage" type="button" class="btn btn-primary">テキストを抽出</button>
       </div>
     </div>
   </div>
@@ -20,16 +20,17 @@ export default {
       message: '',
     };
   },
-  methods: {
-    emitMessage() {
-      this.$emit('emit-message', this.message);
+  computed: {
+    isButtonDisabled() {
+      return this.message.length <= 0
     }
   },
-  computed: {
-    rows() {
-      const num = this.message.split('\n').length;
-      return (num > 4) ? num : 4;
-    },
+  methods: {
+    emitMessage() {
+      // 改行は除外
+      let msg = this.message.replace('\n', '');
+      this.$emit('emit-message', msg);
+    }
   },
 };
 </script>

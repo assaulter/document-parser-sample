@@ -1,14 +1,15 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Text抽出結果</h4>
+      <h4 class="card-title">2.テキスト抽出結果</h4>
       <div class="card-text">
         <textarea class="form-control" 
           :rows="rows" v-model="text">
         </textarea>
+        <small class="text-muted">改行位置を修正すると戻した際にずれます...</small>
       </div>
       <div class="card-text mt-4">
-        <button @click="emitTextList" type="button" class="btn btn-primary">submit</button>
+        <button v-bind:disabled="isButtonDisabled" @click="emitTextList" type="button" class="btn btn-primary">htmlに戻す</button>
       </div>
     </div>
   </div>
@@ -36,6 +37,9 @@ export default {
       const num = this.textList.length;
       return (num > 4) ? num : 4;
     },
+    isButtonDisabled() {
+      return this.inputText.length <= 0
+    }
   },
   methods: {
     emitTextList() {
