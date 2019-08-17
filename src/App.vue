@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <h1>Sample</h1>
     <div class="container">
+      <h1>SampleApp</h1>
       <div class="row">
         <div class="col">
           <HtmlInputForm @emit-message="onEmitMessage"/>
@@ -131,8 +131,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-bottom: 20px;
 }
 </style>
