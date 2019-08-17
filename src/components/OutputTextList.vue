@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">2.テキスト抽出結果</h4>
+      <h4 class="card-title">2.テキスト抽出結果を編集する</h4>
       <div class="card-text">
         <textarea class="form-control"
           :rows="rows" v-model="text">
