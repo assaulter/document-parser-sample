@@ -102,16 +102,19 @@ export default {
   },
   methods: {
     onEmitMessage(val) {
+      // save to inputHtml
       this.inputHtml = val;
-      const nodeList = parse(val);
-      updateTextList(nodeList);
+
+      updateTextList(parse(val));
       this.inputTextList = textList;
     },
     onChangeTextList(val) {
       this.inputTextList = val;
     },
     onEmitTextList(val) {
+      // 保存しておいたinputHtmlを使う
       const nodeList = parse(this.inputHtml);
+
       updateNodeList(nodeList, val);
       const doc = document.createElement('div');
       nodeList.forEach(node => {

@@ -3,7 +3,7 @@
     <div class="card-body">
       <h4 class="card-title">3.htmlに戻した結果</h4>
       <div class="card-text">
-        <textarea class="form-control" v-model="html" :rows="rows"></textarea>
+        <textarea disabled class="form-control" v-model="html" :rows="rows"></textarea>
       </div>
       <div class="card-text mt-4">
         <button type="button" class="btn btn-primary copy" :data-clipboard-text="html">クリップボードにコピー</button>
