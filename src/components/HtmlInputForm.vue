@@ -22,15 +22,15 @@ export default {
   },
   computed: {
     isButtonDisabled() {
-      return this.message.length <= 0
-    }
+      return this.message.length <= 0;
+    },
   },
   methods: {
     emitMessage() {
       // 改行は除外
-      let msg = this.message.replace('\n', '');
+      const msg = this.message.replace('\n', '');
       this.$emit('emit-message', msg);
-    }
+    },
   },
 };
 </script>

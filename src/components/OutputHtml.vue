@@ -6,7 +6,11 @@
         <textarea disabled class="form-control" v-model="html" :rows="rows"></textarea>
       </div>
       <div class="card-text mt-4">
-        <button type="button" class="btn btn-primary copy" :data-clipboard-text="html">クリップボードにコピー</button>
+        <button
+          type="button"
+          class="btn btn-primary copy"
+          :data-clipboard-text="html"
+        >クリップボードにコピー</button>
       </div>
     </div>
   </div>
@@ -16,7 +20,7 @@
 import Clipboard from 'clipboard';
 
 const clipboard = new Clipboard('.copy');
-clipboard.on('success', function(e) {
+clipboard.on('success', (e) => {
   alert('コピーしました');
   e.clearSelection();
 });
@@ -24,21 +28,21 @@ clipboard.on('success', function(e) {
 export default {
   name: 'OutputHtml',
   props: {
-    outputHtml: String
+    outputHtml: String,
   },
   computed: {
     html: {
       get() {
-        return this.outputHtml
+        return this.outputHtml;
       },
-      set(val) {
+      set() {
         // do nothing.
-      }
+      },
     },
     rows() {
       const num = this.outputHtml.split('\n').length;
       return (num > 4) ? num : 4;
     },
-  }
-}
+  },
+};
 </script>
