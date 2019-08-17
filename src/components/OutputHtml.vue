@@ -5,11 +5,22 @@
       <div class="card-text">
         <textarea class="form-control" v-model="html" :rows="rows"></textarea>
       </div>
+      <div class="card-text mt-4">
+        <button type="button" class="btn btn-primary copy" :data-clipboard-text="html">クリップボードにコピー</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Clipboard from 'clipboard';
+
+const clipboard = new Clipboard('.copy');
+clipboard.on('success', function(e) {
+  alert('コピーしました');
+  e.clearSelection();
+});
+
 export default {
   name: 'OutputHtml',
   props: ['outputHtml'],
